@@ -1,12 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @Component({
   selector: 'app-consulta-produtos',
   standalone: true,
   imports: [
-    CommonModule
+    CommonModule,
+    NgxPaginationModule,
+    RouterLink
   ],
   templateUrl: './consulta-produtos.component.html',
   styleUrl: './consulta-produtos.component.css'
@@ -14,8 +18,11 @@ import { Component, OnInit } from '@angular/core';
 export class ConsultaProdutosComponent implements OnInit {
 
   // Atributos
-  produtos : any[] = [];
-  
+  produtos: any[] = [];
+  paginador: number = 1;
+  produto: any = {};
+  mensagem: string = '';
+
   // Declarando um objeto HttpCliente
   constructor(
     private httpClient : HttpClient
@@ -36,4 +43,29 @@ export class ConsultaProdutosComponent implements OnInit {
       })
   }
 
+  // Função para avançar e voltar na régua de paginação
+  pageChange(event: any): void {
+    this.paginador = event;
+  }
+
+  // Função para capturar os dados do produto que será exibido na janela modal
+  onSelect(value: any): void {
+    this.produto = value;
+  }
+
+  // Função para realizar a exclusão do produto
+  onDelete(): void {
+    this.httpClient.delete(`http://localhost:8081/api/produtos/${this.produto.id}`)
+      .subscribe({
+        next: (data: any) => {
+          this.mensagem = `Produto '${data.nome}' excluído com sucesso.`
+          this.ngOnInit();
+        },
+        error: (e) => {
+          console.log(e.error);
+        }
+      })
+  }
+
+  
 }

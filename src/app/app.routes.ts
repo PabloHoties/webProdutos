@@ -13,7 +13,7 @@ export const routes: Routes = [
         component: ConsultaProdutosComponent
     },
     {
-        path: 'editar-produtos',
+        path: 'editar-produtos/:id',
         component: EdicaoProdutosComponent
     }
 ];

@@ -17,6 +17,7 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 export class CadastroProdutosComponent implements OnInit {
 
   categorias: any[] = [];
+  mensagem : string = '';
 
   constructor(
     private httpClient: HttpClient
@@ -48,8 +49,8 @@ export class CadastroProdutosComponent implements OnInit {
   onSubmit() {
     this.httpClient.post('http://localhost:8081/api/produtos', this.form.value)
       .subscribe({
-        next: (data) => {
-          alert('Produto cadastrado com sucesso!');
+        next: (data : any) => {
+          this.mensagem = `Produto '${data.nome}' cadastrado com sucesso!`
           this.form.reset();
         },
         error: (e) => {
